@@ -29,10 +29,10 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 board_config = env.BoardConfig()
 
-# Depending on whether we're using GCC8 or GCC12, the compiler executable's names need to be adapted.
+# Depending on whether we're using GCC version greater than 11, the compiler executable's names need to be adapted.
 # Attempt proper detection by looking at the package version.
-is_gcc_12 = platform.get_package_version("toolchain-riscv").split(".")[1].startswith("12")
-compiler_triple = "riscv-none-elf" if is_gcc_12 else "riscv-none-embed"
+is_gcc_gt_11 = int(platform.get_package_version("toolchain-riscv").split(".")[1][:-4]) > 11
+compiler_triple = "riscv-none-elf" if is_gcc_gt_11 else "riscv-none-embed"
 env.Replace(
     AR="%s-gcc-ar" % compiler_triple,
     AS="%s-as" % compiler_triple,
